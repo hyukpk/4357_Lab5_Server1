@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4357 Lab 5</title>
+</head>
+<body>
+    <label for="insertClients">Insert</label>
+    <br>
+    <input type="submit" value="Submit" onclick="sendSQLrows()">
+    <br>
+
+    <label for="sql-query">Submit SQL Query</label>
+    <br>
+    <textarea id="definition" rows="4" cols="50"></textarea>
+    <br>
+
+    <input type="submit" value="Submit" onclick="sendSQLquery()">
+    <br>
+    <div id="response-result"></div>
+</body>
+<script>
+    function sendSQLrows() {
+        // Assuming you want to insert a new patient as an example
+        fetch('https://yourvercelapp.vercel.app/api/add-patient', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // Add any other headers your API requires
+            },
+            body: JSON.stringify({
+                name: 'John Doe',
+                dateOfBirth: '1990-01-01'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('response-result').innerText = JSON.stringify(data);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function sendSQLquery() {
+        // Example for sending a SQL query - make sure your server handles this safely to avoid SQL injection
+        let query = document.getElementById('definition').value;
+        fetch('https://yourvercelapp.vercel.app/api/run-query', {
+            method: 'POST', // Or 'GET', depending on your API design
+            headers: {
+                'Content-Type': 'application/json',
+                // Add any other headers your API requires
+            },
+            body: JSON.stringify({ query: query })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('response-result').innerText = JSON.stringify(data);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+</html>
