@@ -22,41 +22,68 @@
 </body>
 <script>
     function sendSQLrows() {
-        // Assuming you want to insert a new patient as an example
-        fetch('https://yourvercelapp.vercel.app/api/add-patient', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                // Add any other headers your API requires
-            },
-            body: JSON.stringify({
-                name: 'John Doe',
-                dateOfBirth: '1990-01-01'
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('response-result').innerText = JSON.stringify(data);
-        })
-        .catch(error => console.error('Error:', error));
+        const xhttp = new XMLHttpRequest();
+        const url = 'https://4537-lab5-server2.vercel.app/api/4rows';
+        xhttp.open("POST", url, true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("response-result").innerHTML = 
+                this.responseText;
+            } else if (this.readyState == 4) {
+                document.getElementById("response-result").innerHTML = 
+                this.responseText;
+            } 
+        };
     }
 
     function sendSQLquery() {
+        const query = document.getElementById('definition').value;
+        
+        // Check if the query is an INSERT or SELECT statement
+        if (query.toUpperCase().includes('INSERT')) {
+            sendCustomPostRequest();
+        } else if (query.toUpperCase().includes('SELECT')) {
+            sendCustomGetRequest();
+        } else {
+            console.error('Unsupported SQL operation');
+        }
+    }
+
+    function sendCustomPostRequest() {
         // Example for sending a SQL query - make sure your server handles this safely to avoid SQL injection
-        let query = document.getElementById('definition').value;
-        fetch('https://vercel.com/hyukpks-projects/4537-lab5-server2/Eqv3HpmQpep66k9pKgCTfmeLf8UD', {
-            method: 'POST', // Or 'GET', depending on your API design
-            headers: {
-                'Content-Type': 'application/json',
-                // Add any other headers your API requires
-            },
-            body: JSON.stringify({ query: query })
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('response-result').innerText = JSON.stringify(data);
-        })
-        .catch(error => console.error('Error:', error));
+        const query = document.getElementById('definition').value;
+        const xhttp = new XMLHttpRequest();
+        const url = "https://4537-lab5-server2.vercel.app/api/custom";
+        xhttp.open("POST, url, true");
+        xhttp.send(query);
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("result").innerHTML = 
+                    this.responseText;
+            } else if (this.readyState == 4) {
+                    document.getElementById("result").innerHTML =
+                    this.responseText;
+            }
+        };
+    }
+    function sendCustomGetRequest() {
+        // Example for sending a SQL query - make sure your server handles this safely to avoid SQL injection
+        const query = document.getElementById('definition').value;
+        const xhttp = new XMLHttpRequest();
+        const url = "https://4537-lab5-server2.vercel.app/api/custom?query=${query}";
+        xhttp.open("GET, url, true");
+        xhttp.send();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("result").innerHTML = 
+                    this.responseText;
+            } else if (this.readyState == 4) {
+                    document.getElementById("result").innerHTML =
+                    this.responseText;
+            }
+        };
     }
 </script>
 </html>
